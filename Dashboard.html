@@ -9,22 +9,22 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --stone:       #1c1a17;
-  --stone-mid:   #2e2b27;
-  --stone-light: #3d3a35;
-  --gold:        #c9a84c;
-  --gold-light:  #e2c47a;
-  --cream:       #f4efe8;
-  --cream-dim:   #d8d0c2;
-  --muted:       #8a8278;
-  --danger:      #c0574a;
-  --danger-dim:  rgba(192,87,74,0.15);
-  --success:     #4a8c5c;
-  --success-dim: rgba(74,140,92,0.15);
+  --stone:       #191511;
+  --stone-mid:   #2c251f;
+  --stone-light: #3f352e;
+  --gold:        #d2b76a;
+  --gold-light:  #edd8a1;
+  --cream:       #f7efe6;
+  --cream-dim:   #e5d8c6;
+  --muted:       #b2a694;
+  --danger:      #d66f5e;
+  --danger-dim:  rgba(214,111,94,0.25);
+  --success:     #68aa76;
+  --success-dim: rgba(104,170,118,0.2);
 }
 
 html { scroll-behavior: smooth; }
-body { font-family: 'DM Sans', sans-serif; background: var(--stone); color: var(--cream); min-height: 100vh; }
+body { font-family: 'DM Sans', sans-serif; background: linear-gradient(180deg, #1f1913 0%, #181310 100%); color: var(--cream); min-height: 100vh; }
 
 /* ── Header ── */
 .header {
@@ -83,13 +83,13 @@ body { font-family: 'DM Sans', sans-serif; background: var(--stone); color: var(
 /* ── Search ── */
 .search-bar { margin-bottom: 24px; }
 .search-bar input {
-  background: var(--stone-mid); border: 1px solid var(--stone-light);
+  background: var(--stone-light); border: 1px solid rgba(255,255,255,0.12);
   border-radius: 8px; color: var(--cream); font-family: inherit; font-size: 14px;
   padding: 10px 16px; width: 100%; max-width: 380px; outline: none;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 .search-bar input::placeholder { color: var(--muted); }
-.search-bar input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,168,76,0.1); }
+.search-bar input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(210,183,106,0.13); }
 
 /* ── Candidate grid ── */
 .candidate-grid {
