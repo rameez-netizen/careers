@@ -349,32 +349,36 @@
     <div class="form-grid">
       <div class="field">
         <label for="fname">First name <span class="req">*</span></label>
-        <input type="text" id="fname" name="fname" placeholder="Arjun" autocomplete="given-name" />
+        <input type="text" id="fname" name="fname" autocomplete="given-name" />
         <span class="err-msg" id="err-fname"></span>
       </div>
       <div class="field">
         <label for="lname">Last name <span class="req">*</span></label>
-        <input type="text" id="lname" name="lname" placeholder="Sharma" autocomplete="family-name" />
+        <input type="text" id="lname" name="lname" autocomplete="family-name" />
         <span class="err-msg" id="err-lname"></span>
       </div>
       <div class="field">
         <label for="email">Email address <span class="req">*</span></label>
-        <input type="email" id="email" name="email" placeholder="arjun@email.com" autocomplete="email" />
+        <input type="email" id="email" name="email" autocomplete="email" />
         <span class="err-msg" id="err-email"></span>
       </div>
       <div class="field">
         <label for="phone">Phone number <span class="req">*</span></label>
-        <input type="tel" id="phone" name="phone" placeholder="+91 98765 43210" autocomplete="tel" />
+        <input type="tel" id="phone" name="phone" autocomplete="tel" />
         <span class="err-msg" id="err-phone"></span>
       </div>
       <div class="field">
-        <label for="city">Area / City <span class="req">*</span></label>
-        <input type="text" id="city" name="city" placeholder="Kondapur, Hyderabad" />
+        <label for="city">City <span class="req">*</span></label>
+        <input type="text" id="city" name="city" placeholder="e.g. Hyderabad" />
         <span class="err-msg" id="err-city"></span>
       </div>
       <div class="field">
+        <label for="area">Area / Locality</label>
+        <input type="text" id="area" name="area" placeholder="e.g. Banjara Hills, Koramangala" />
+      </div>
+      <div class="field full">
         <label for="linkedin">LinkedIn or Portfolio URL</label>
-        <input type="url" id="linkedin" name="linkedin" placeholder="https://linkedin.com/in/..." />
+        <input type="url" id="linkedin" name="linkedin"/>
         <span class="err-msg" id="err-linkedin"></span>
       </div>
     </div>
@@ -493,33 +497,92 @@
 
     <!-- 04 · How you work -->
     <div class="section-label"><span>04 &middot; How you work</span></div>
+    <p class="helper" style="margin-bottom:24px; font-size:14px; color:var(--muted); line-height:1.7;">
+      Write honestly. We're trying to understand how you actually think and operate &mdash; not who you are on paper.
+    </p>
+
     <div class="form-grid cols-1">
       <div class="field">
-         <label>How do you prefer to communicate? <span class="req">*</span></label>
-         <div class="choice-group" id="comm-pref">
-           <label><input type="radio" name="comm" value="Mostly Written" /> Mostly written (messages, docs, email — respond in your own time)</label>
-           <label><input type="radio" name="comm" value="Mostly live" /> Mostly live (calls, meetings — real-time conversations)</label>
-           <label><input type="radio" name="comm" value="both written and live depending on the situation" /> A mix of both depending on the situation</label>
-         </div>
-         <span class="err-msg" id="err-comm"></span>
-       </div>
-       
-       <div class="field">
-         <label>What best describes how you operate?</label>
-         <div class="choice-group">
-           <label><input type="radio" name="style" value="planner" /> I like to plan ahead and think things through before starting</label>
-           <label><input type="radio" name="style" value="executor" /> I prefer to start quickly and figure things out as I go</label>
-           <label><input type="radio" name="style" value="planner and executor" /> I do both depending on the task or situation</label>
-         </div>
-       </div>
-      <!--<div class="field">
-        <label>Are you open to a video/audio call with our team?</label>
-        <div class="choice-group">
-          <label><input type="radio" name="call" value="yes" /> Yes, absolutely</label>
-          <label><input type="radio" name="call" value="maybe" /> Depends on the time</label>
-          <label><input type="radio" name="call" value="no" /> Prefer to keep it async</label>
+        <label>How do you prefer to communicate? <span class="req">*</span></label>
+        <div class="choice-group" id="comm-pref">
+          <label><input type="radio" name="comm" value="Mostly Written" /> Mostly written (messages, docs, email)</label>
+          <label><input type="radio" name="comm" value="Mostly Live" /> Mostly live (calls, meetings)</label>
+          <label><input type="radio" name="comm" value="Mix of both" /> A mix of both</label>
         </div>
-      </div>-->
+        <span class="err-msg" id="err-comm"></span>
+      </div>
+      <div class="field">
+        <label>What best describes how you operate?</label>
+        <div class="choice-group">
+          <label><input type="radio" name="style" value="Deep planner" /> I like to plan ahead before starting</label>
+          <label><input type="radio" name="style" value="Fast executor" /> I prefer to start and figure it out as I go</label>
+          <label><input type="radio" name="style" value="Both depending" /> Both, depending on the task</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="q-card">
+      <div class="q-label">Do you prefer speed or perfection? Why?</div>
+      <div class="char-wrap">
+        <textarea class="tall" id="hw1" name="hw1" placeholder="Be honest — not what sounds right, but how you actually operate." maxlength="800"></textarea>
+        <span class="char-count" id="hc1">0 / 800</span>
+      </div>
+    </div>
+
+    <div class="q-card">
+      <div class="q-label">When you're stuck on a problem you've never solved before, what do you actually do? Walk us through your process.</div>
+      <div class="char-wrap">
+        <textarea class="tall" id="hw2" name="hw2" placeholder="Step by step — what happens when you hit a wall on something unfamiliar?" maxlength="800"></textarea>
+        <span class="char-count" id="hc2">0 / 800</span>
+      </div>
+    </div>
+
+    <div class="q-card">
+      <div class="q-label">How do you manage your time, focus, and energy when things get intense? Any tools, routines, or systems you use?</div>
+      <div class="char-wrap">
+        <textarea class="tall" id="hw3" name="hw3" placeholder="What actually works for you — not what you think you should say." maxlength="800"></textarea>
+        <span class="char-count" id="hc3">0 / 800</span>
+      </div>
+    </div>
+
+    <div class="q-card">
+      <div class="q-label">Do you prefer working alone or with others? Why? What kind of teammates bring out your best?</div>
+      <div class="char-wrap">
+        <textarea class="tall" id="hw4" name="hw4" placeholder="Describe the environments and people you thrive around." maxlength="800"></textarea>
+        <span class="char-count" id="hc4">0 / 800</span>
+      </div>
+    </div>
+
+    <div class="q-card">
+      <div class="q-label">Tell us about a time you took full ownership of something that wasn't even your job. What happened, and what did you learn?</div>
+      <div class="char-wrap">
+        <textarea class="tall" id="hw5" name="hw5" placeholder="Situation → what you did → what changed." maxlength="800"></textarea>
+        <span class="char-count" id="hc5">0 / 800</span>
+      </div>
+    </div>
+
+    <div class="q-card">
+      <div class="q-label">Tell us about a time you had to make a tough ethical decision. What happened and how did you handle it?</div>
+      <div class="char-wrap">
+        <textarea class="tall" id="hw6" name="hw6" placeholder="What was at stake, what did you decide, and how did it land?" maxlength="800"></textarea>
+        <span class="char-count" id="hc6">0 / 800</span>
+      </div>
+    </div>
+
+    <div class="q-card">
+      <div class="q-label">What's the best critical feedback you've received &mdash; and how did you respond to it?</div>
+      <div class="char-wrap">
+        <textarea class="tall" id="hw7" name="hw7" placeholder="What was the feedback, and what did you actually do with it?" maxlength="800"></textarea>
+        <span class="char-count" id="hc7">0 / 800</span>
+      </div>
+    </div>
+
+    <div class="q-card">
+      <div class="q-label">If you could define your own role at Stone Profits, what would you want to work on, and why?</div>
+      <div class="char-wrap">
+        <textarea class="tall" id="hw8" name="hw8" placeholder="What excites you most about what we do, and where do you see yourself fitting?" maxlength="800"></textarea>
+        <span class="char-count" id="hc8">0 / 800</span>
+      </div>
     </div>
 
     <!-- 05 · Resume -->
@@ -575,7 +638,9 @@
   var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzli9cJtUeHRN6YYmVz3X2l0fmYhtJzBC3DRI-oxxwkiH3UTGrl3Stp2JQ_Hz_VOOnq/exec';
 
   // ── Character counters ────────────────────────────────────────────────────────
-  [['q1','c1'],['q2','c2'],['q3','c3'],['q4','c4'],['q5','c5']].forEach(function(pair){
+  [['q1','c1'],['q2','c2'],['q3','c3'],['q4','c4'],['q5','c5'],
+   ['hw1','hc1'],['hw2','hc2'],['hw3','hc3'],['hw4','hc4'],
+   ['hw5','hc5'],['hw6','hc6'],['hw7','hc7'],['hw8','hc8']].forEach(function(pair){
     var ta = document.getElementById(pair[0]);
     var ct = document.getElementById(pair[1]);
     if (ta && ct) {
@@ -723,6 +788,7 @@
         candidateEmail:   (document.getElementById('email').value || '').trim(),
         candidatePhone:   (document.getElementById('phone').value || '').trim(),
         city:             (document.getElementById('city').value || '').trim(),
+        areaInCity:       (document.getElementById('area').value || '').trim(),
         linkedin:         (document.getElementById('linkedin').value || '').trim(),
         role:             '',
         experience:       parseFloat(document.getElementById('exp').value) || 0,
@@ -733,6 +799,14 @@
         commStyle:        (document.querySelector('[name="comm"]:checked') || {}).value || '',
         workStyle:        (document.querySelector('[name="style"]:checked') || {}).value || '',
         videoCall:        (document.querySelector('[name="call"]:checked') || {}).value || '',
+        hw1:              (document.getElementById('hw1').value || '').trim(),
+        hw2:              (document.getElementById('hw2').value || '').trim(),
+        hw3:              (document.getElementById('hw3').value || '').trim(),
+        hw4:              (document.getElementById('hw4').value || '').trim(),
+        hw5:              (document.getElementById('hw5').value || '').trim(),
+        hw6:              (document.getElementById('hw6').value || '').trim(),
+        hw7:              (document.getElementById('hw7').value || '').trim(),
+        hw8:              (document.getElementById('hw8').value || '').trim(),
         q1:               (document.getElementById('q1').value || '').trim(),
         q2:               (document.getElementById('q2').value || '').trim(),
         q3:               (document.getElementById('q3').value || '').trim(),
