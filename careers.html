@@ -9,22 +9,22 @@
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --stone: #1c1a17;
-    --stone-mid: #2e2b27;
-    --stone-light: #3d3a35;
-    --gold: #c9a84c;
-    --gold-light: #e2c47a;
-    --cream: #f4efe8;
-    --cream-dim: #d8d0c2;
-    --muted: #8a8278;
-    --danger: #c0574a;
+    --stone: #191511;
+    --stone-mid: #2c251f;
+    --stone-light: #3f352e;
+    --gold: #d2b76a;
+    --gold-light: #edd8a1;
+    --cream: #f7efe6;
+    --cream-dim: #e5d8c6;
+    --muted: #b2a694;
+    --danger: #d66f5e;
   }
 
   html { scroll-behavior: smooth; }
 
   body {
     font-family: 'DM Sans', sans-serif;
-    background: var(--stone);
+    background: linear-gradient(180deg, #1f1913 0%, #181310 100%);
     color: var(--cream);
     min-height: 100vh;
     overflow-x: hidden;
@@ -120,8 +120,8 @@
 
   input[type=text], input[type=email], input[type=tel], input[type=url],
   input[type=number], select, textarea {
-    background: var(--stone-mid);
-    border: 1px solid var(--stone-light);
+    background: var(--stone-light);
+    border: 1px solid rgba(255,255,255,0.12);
     border-radius: 8px;
     color: var(--cream);
     font-family: 'DM Sans', sans-serif;
@@ -139,7 +139,7 @@
   input::placeholder, textarea::placeholder { color: var(--muted); }
   input:focus, select:focus, textarea:focus {
     border-color: var(--gold);
-    box-shadow: 0 0 0 3px rgba(201,168,76,0.12);
+    box-shadow: 0 0 0 3px rgba(210,183,106,0.13);
   }
   select {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238a8278' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
