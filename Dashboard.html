@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Hiring Dashboard — Stone Profits</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --stone:       #1c1a17;
+  --stone-mid:   #2e2b27;
+  --stone-light: #3d3a35;
+  --gold:        #c9a84c;
+  --gold-light:  #e2c47a;
+  --cream:       #f4efe8;
+  --cream-dim:   #d8d0c2;
+  --muted:       #8a8278;
+  --danger:      #c0574a;
+  --danger-dim:  rgba(192,87,74,0.15);
+  --success:     #4a8c5c;
+  --success-dim: rgba(74,140,92,0.15);
+}
+
+html { scroll-behavior: smooth; }
+body { font-family: 'DM Sans', sans-serif; background: var(--stone); color: var(--cream); min-height: 100vh; }
+
+/* ── Header ── */
+.header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 32px;
+  background: var(--stone-mid);
+  border-bottom: 1px solid var(--stone-light);
+  position: sticky; top: 0; z-index: 50;
+}
+.header-brand { display: flex; align-items: baseline; gap: 12px; }
+.header-brand h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px; font-weight: 500;
+  color: var(--gold);
+}
+.header-brand span { font-size: 13px; color: var(--muted); }
+.header-right { display: flex; align-items: center; gap: 12px; }
+.last-updated { font-size: 12px; color: var(--muted); }
+.btn-refresh {
+  background: transparent; border: 1px solid var(--stone-light);
+  color: var(--cream-dim); font-family: inherit; font-size: 13px;
+  padding: 7px 14px; border-radius: 6px; cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+.btn-refresh:hover { border-color: var(--gold); color: var(--gold); }
+.btn-refresh.spinning { animation: spin 0.8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Tabs ── */
+.tabs-bar {
+  display: flex; gap: 0;
+  padding: 0 32px;
+  background: var(--stone-mid);
+  border-bottom: 1px solid var(--stone-light);
+}
+.tab-btn {
+  background: transparent; border: none; border-bottom: 2px solid transparent;
+  color: var(--muted); font-family: inherit; font-size: 14px; font-weight: 500;
+  padding: 14px 20px; cursor: pointer; display: flex; align-items: center; gap: 8px;
+  transition: color 0.2s, border-color 0.2s;
+  white-space: nowrap;
+}
+.tab-btn:hover { color: var(--cream-dim); }
+.tab-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
+.tab-count {
+  background: var(--stone-light); color: var(--cream-dim);
+  font-size: 11px; font-weight: 600;
+  padding: 2px 7px; border-radius: 20px; min-width: 22px; text-align: center;
+}
+.tab-btn.active .tab-count { background: rgba(201,168,76,0.2); color: var(--gold); }
+
+/* ── Panels ── */
+.panel { display: none; padding: 28px 32px; }
+.panel.active { display: block; }
+
+/* ── Search ── */
+.search-bar { margin-bottom: 24px; }
+.search-bar input {
+  background: var(--stone-mid); border: 1px solid var(--stone-light);
+  border-radius: 8px; color: var(--cream); font-family: inherit; font-size: 14px;
+  padding: 10px 16px; width: 100%; max-width: 380px; outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.search-bar input::placeholder { color: var(--muted); }
+.search-bar input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,168,76,0.1); }
+
+/* ── Candidate grid ── */
+.candidate-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
+}
+
+/* ── Tile ── */
+.tile {
+  background: var(--stone-mid); border: 1px solid var(--stone-light);
+  border-radius: 12px; padding: 20px; cursor: pointer;
+  transition: border-color 0.2s, transform 0.15s, box-shadow 0.2s;
+  display: flex; flex-direction: column; gap: 14px;
+}
+.tile:hover {
+  border-color: rgba(201,168,76,0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+}
+.tile-top { display: flex; align-items: center; gap: 12px; }
+.tile-name { font-size: 15px; font-weight: 500; color: var(--cream); }
+.tile-role { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.tile-meta { display: flex; gap: 10px; font-size: 12px; color: var(--cream-dim); }
+.tile-meta span::before { content: '·'; margin-right: 10px; color: var(--stone-light); }
+.tile-meta span:first-child::before { content: ''; margin: 0; }
+.tile-footer { display: flex; justify-content: space-between; align-items: center; margin-top: auto; }
+.tile-time { font-size: 11px; color: var(--muted); }
+
+/* ── Candidate list rows (shortlisted / rejected) ── */
+.candidate-list { display: flex; flex-direction: column; gap: 10px; }
+.list-row {
+  background: var(--stone-mid); border: 1px solid var(--stone-light);
+  border-radius: 10px; padding: 16px 20px;
+  display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+}
+.row-info { flex: 1; min-width: 140px; }
+.row-name { font-size: 15px; font-weight: 500; color: var(--cream); }
+.row-sub  { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.row-email { font-size: 13px; color: var(--cream-dim); margin-right: auto; }
+.row-actions { display: flex; gap: 8px; flex-shrink: 0; }
+
+/* ── Avatar ── */
+.avatar {
+  width: 44px; height: 44px; border-radius: 50%;
+  background: rgba(201,168,76,0.15); border: 1px solid rgba(201,168,76,0.3);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 16px; font-weight: 600; color: var(--gold);
+  flex-shrink: 0;
+}
+.avatar.sm { width: 34px; height: 34px; font-size: 13px; }
+.avatar.lg { width: 56px; height: 56px; font-size: 20px; }
+.avatar.dim { background: rgba(255,255,255,0.05); border-color: var(--stone-light); color: var(--muted); }
+
+/* ── Status badges ── */
+.status-pill {
+  font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 3px 10px; border-radius: 20px;
+}
+.status-pill.new        { background: rgba(201,168,76,0.15); color: var(--gold); }
+.status-pill.shortlisted { background: var(--success-dim); color: #7ecf9a; }
+.status-pill.rejected   { background: var(--danger-dim); color: #f5a89f; }
+
+/* ── Small buttons ── */
+.btn-sm {
+  font-family: inherit; font-size: 12px; font-weight: 500;
+  padding: 7px 14px; border-radius: 6px; border: 1px solid; cursor: pointer;
+  transition: opacity 0.15s; white-space: nowrap;
+}
+.btn-sm:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn-sm.btn-view      { background: transparent; border-color: var(--stone-light); color: var(--cream-dim); }
+.btn-sm.btn-view:hover { border-color: var(--cream-dim); }
+.btn-sm.btn-email-invite { background: transparent; border-color: var(--gold); color: var(--gold); }
+.btn-sm.btn-email-invite:hover { background: rgba(201,168,76,0.1); }
+.btn-sm.btn-restore   { background: transparent; border-color: var(--stone-light); color: var(--muted); }
+.btn-sm.btn-restore:hover { border-color: var(--cream-dim); color: var(--cream-dim); }
+
+/* ── Empty state ── */
+.empty-state {
+  text-align: center; padding: 64px 24px;
+  font-size: 15px; color: var(--muted); line-height: 1.7;
+}
+.empty-state strong { display: block; font-size: 18px; color: var(--cream-dim); margin-bottom: 8px; }
+
+/* ── Loader ── */
+#loader {
+  position: fixed; inset: 0; background: var(--stone);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  z-index: 200; gap: 16px;
+}
+#loader .spinner {
+  width: 36px; height: 36px; border-radius: 50%;
+  border: 2px solid var(--stone-light);
+  border-top-color: var(--gold);
+  animation: spin 0.8s linear infinite;
+}
+#loader p { font-size: 14px; color: var(--muted); }
+
+/* ── Modal overlay ── */
+.overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(4px);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 100; opacity: 0; pointer-events: none;
+  transition: opacity 0.25s;
+  padding: 20px;
+}
+.overlay.open { opacity: 1; pointer-events: all; }
+
+/* ── Candidate detail slider ── */
+#modal-overlay {
+  align-items: stretch;
+  justify-content: flex-end;
+  padding: 0;
+}
+
+.modal-box {
+  background: var(--stone-mid); border-left: 1px solid var(--stone-light);
+  border-radius: 16px 0 0 16px; width: 70vw; max-width: 100vw; height: 100%;
+  overflow-y: auto; position: relative; display: flex; flex-direction: column;
+  transform: translateX(100%); transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+}
+.overlay.open .modal-box { transform: translateX(0); }
+
+.modal-header-bar {
+  display: flex; justify-content: flex-end;
+  padding: 16px 20px 0;
+  position: sticky; top: 0;
+  background: var(--stone-mid);
+  z-index: 2;
+}
+.close-btn {
+  background: var(--stone-light); border: none; color: var(--muted);
+  width: 30px; height: 30px; border-radius: 50%; font-size: 18px; line-height: 1;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: background 0.15s, color 0.15s;
+}
+.close-btn:hover { background: var(--danger); color: #fff; }
+
+.modal-content { padding: 8px 28px 28px; flex: 1; }
+
+.modal-hero { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; }
+.modal-hero h2 { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 500; line-height: 1.2; }
+.modal-role { font-size: 14px; color: var(--muted); margin-top: 4px; }
+.modal-meta-chips { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+.chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--stone-light); border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 100px; padding: 5px 12px;
+  font-size: 13px; color: var(--cream-dim);
+  text-decoration: none;
+}
+.chip:hover { border-color: var(--gold); color: var(--gold); }
+
+.detail-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+  margin-bottom: 24px;
+}
+@media(max-width:600px){ .detail-grid { grid-template-columns: repeat(2, 1fr); } }
+.detail-cell {
+  background: rgba(255,255,255,0.03); border: 1px solid var(--stone-light);
+  border-radius: 8px; padding: 10px 14px;
+}
+.detail-cell .lbl { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+.detail-cell .val { font-size: 14px; color: var(--cream); }
+
+.section-heading {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px; font-weight: 500; color: var(--cream);
+  margin: 24px 0 14px;
+  padding-bottom: 10px; border-bottom: 1px solid var(--stone-light);
+}
+
+.qa-item { margin-bottom: 18px; }
+.qa-q { font-size: 13px; font-weight: 500; color: var(--gold); margin-bottom: 6px; }
+.qa-a { font-size: 14px; color: var(--cream-dim); line-height: 1.7; white-space: pre-wrap; }
+
+.modal-footer {
+  display: flex; gap: 10px; flex-wrap: wrap;
+  padding: 20px 28px; border-top: 1px solid var(--stone-light);
+  position: sticky; bottom: 0;
+  background: var(--stone-mid);
+}
+.btn-action {
+  font-family: inherit; font-size: 14px; font-weight: 500;
+  padding: 10px 22px; border-radius: 8px; border: none; cursor: pointer;
+  transition: opacity 0.15s, transform 0.1s;
+}
+.btn-action:hover   { opacity: 0.88; transform: translateY(-1px); }
+.btn-action:active  { transform: translateY(0); }
+.btn-action:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+.btn-shortlist { background: var(--success); color: #fff; }
+.btn-reject    { background: var(--danger);  color: #fff; }
+.btn-send-invite { background: var(--gold); color: var(--stone); }
+.btn-to-new    { background: var(--stone-light); color: var(--cream-dim); }
+
+/* ── Email composer ── */
+.email-box {
+  background: var(--stone-mid); border: 1px solid var(--stone-light);
+  border-radius: 16px; width: 100%; max-width: 600px;
+  position: relative; padding: 28px;
+  transform: translateY(24px); opacity: 0; transition: transform 0.25s, opacity 0.25s;
+}
+.overlay.open .email-box { transform: translateY(0); opacity: 1; }
+.email-box h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px; font-weight: 500; color: var(--cream);
+  margin-bottom: 4px;
+}
+.email-to-name { font-size: 13px; color: var(--muted); margin-bottom: 20px; }
+.email-field { margin-bottom: 16px; display: flex; flex-direction: column; gap: 6px; }
+.email-field label { font-size: 12px; font-weight: 500; color: var(--cream-dim); letter-spacing: 0.04em; }
+.email-field input,
+.email-field textarea {
+  background: var(--stone); border: 1px solid var(--stone-light);
+  border-radius: 8px; color: var(--cream); font-family: inherit; font-size: 14px;
+  padding: 10px 14px; width: 100%; outline: none; resize: vertical;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.email-field input:focus, .email-field textarea:focus {
+  border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,168,76,0.1);
+}
+.email-field input[readonly] { color: var(--muted); cursor: default; }
+.email-field textarea { min-height: 200px; line-height: 1.6; }
+.email-actions { display: flex; gap: 10px; margin-top: 4px; }
+.btn-send-email {
+  background: var(--gold); color: var(--stone);
+  font-family: inherit; font-size: 14px; font-weight: 500;
+  border: none; border-radius: 8px; padding: 12px 28px; cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+.btn-send-email:hover    { background: var(--gold-light); transform: translateY(-1px); }
+.btn-send-email:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+/* ── Toast ── */
+#toast {
+  position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(20px);
+  background: var(--stone-mid); border: 1px solid var(--stone-light);
+  color: var(--cream); font-size: 14px;
+  padding: 12px 24px; border-radius: 100px;
+  opacity: 0; transition: opacity 0.3s, transform 0.3s;
+  pointer-events: none; z-index: 300; white-space: nowrap;
+}
+#toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+#toast.error { border-color: var(--danger); color: #f5a89f; }
+</style>
+</head>
+<body>
+
+<!-- Loader -->
+<div id="loader">
+  <div class="spinner"></div>
+  <p>Loading applications…</p>
+</div>
+
+<!-- Header -->
+<header class="header">
+  <div class="header-brand">
+    <h1>Stone Profits</h1>
+    <span>Hiring Dashboard</span>
+  </div>
+  <div class="header-right">
+    <span class="last-updated" id="last-updated"></span>
+    <button class="btn-refresh" id="btn-refresh" onclick="loadData()">↻ Refresh</button>
+  </div>
+</header>
+
+<!-- Tabs -->
+<div class="tabs-bar">
+  <button class="tab-btn active" data-tab="new"         onclick="switchTab('new')">
+    New Applications <span class="tab-count" id="count-new">0</span>
+  </button>
+  <button class="tab-btn"        data-tab="shortlisted" onclick="switchTab('shortlisted')">
+    Shortlisted <span class="tab-count" id="count-shortlisted">0</span>
+  </button>
+  <button class="tab-btn"        data-tab="rejected"    onclick="switchTab('rejected')">
+    Rejected <span class="tab-count" id="count-rejected">0</span>
+  </button>
+</div>
+
+<!-- Panel: New Applications -->
+<div id="panel-new" class="panel active">
+  <div class="search-bar">
+    <input type="text" id="search-input" placeholder="Search by name, role, or city…" oninput="renderGrid()" />
+  </div>
+  <div id="grid-new" class="candidate-grid"></div>
+  <div id="empty-new" class="empty-state" style="display:none">
+    <strong>No new applications</strong>All candidates have been reviewed.
+  </div>
+</div>
+
+<!-- Panel: Shortlisted -->
+<div id="panel-shortlisted" class="panel">
+  <div id="list-shortlisted" class="candidate-list"></div>
+  <div id="empty-shortlisted" class="empty-state" style="display:none">
+    <strong>No shortlisted candidates yet</strong>Shortlist candidates from the New Applications tab.
+  </div>
+</div>
+
+<!-- Panel: Rejected -->
+<div id="panel-rejected" class="panel">
+  <div id="list-rejected" class="candidate-list"></div>
+  <div id="empty-rejected" class="empty-state" style="display:none">
+    <strong>No rejected candidates</strong>
+  </div>
+</div>
+
+<!-- Candidate Detail Modal -->
+<div id="modal-overlay" class="overlay" onclick="handleOverlayClick(event,'modal-overlay')">
+  <div class="modal-box" id="modal-box">
+    <div class="modal-header-bar">
+      <button class="close-btn" onclick="closeModal()">×</button>
+    </div>
+    <div class="modal-content" id="modal-content"></div>
+    <div class="modal-footer" id="modal-footer"></div>
+  </div>
+</div>
+
+<!-- Email Composer -->
+<div id="email-overlay" class="overlay" onclick="handleOverlayClick(event,'email-overlay')">
+  <div class="email-box">
+    <button class="close-btn" onclick="closeEmail()" style="position:absolute;top:16px;right:16px;"></button>
+    <h3>Schedule Interview</h3>
+    <div class="email-to-name" id="email-to-name"></div>
+    <div class="email-field">
+      <label>TO</label>
+      <input type="email" id="email-to" readonly />
+    </div>
+    <div class="email-field">
+      <label>SUBJECT</label>
+      <input type="text" id="email-subject" />
+    </div>
+    <div class="email-field">
+      <label>MESSAGE</label>
+      <textarea id="email-body"></textarea>
+    </div>
+    <div class="email-actions">
+      <button class="btn-send-email" id="btn-send-email" onclick="sendEmail()">Send Email</button>
+      <button class="btn-action btn-to-new" onclick="closeEmail()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast"></div>
+
+<script>
+  // ── Config ────────────────────────────────────────────────────────────────
+  var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzli9cJtUeHRN6YYmVz3X2l0fmYhtJzBC3DRI-oxxwkiH3UTGrl3Stp2JQ_Hz_VOOnq/exec';
+
+  // ── State ─────────────────────────────────────────────────────────────────
+  var candidates    = [];
+  var currentRowId  = null;
+  var emailTarget   = null;
+
+  // ── Tab switching ─────────────────────────────────────────────────────────
+  function switchTab(tab) {
+    document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
+    document.querySelectorAll('.panel').forEach(function(p){ p.classList.remove('active'); });
+    document.querySelector('[data-tab="' + tab + '"]').classList.add('active');
+    document.getElementById('panel-' + tab).classList.add('active');
+  }
+
+  // ── Load data from Apps Script ────────────────────────────────────────────
+  function loadData() {
+    var btn = document.getElementById('btn-refresh');
+    btn.classList.add('spinning');
+
+    fetch(SCRIPT_URL + '?action=getAll')
+      .then(function(r){ return r.json(); })
+      .then(function(json){
+        if (json.status === 'error') throw new Error(json.message);
+        candidates = json.data || [];
+        renderAll();
+        var now = new Date();
+        document.getElementById('last-updated').textContent =
+          'Updated ' + now.getHours() + ':' + String(now.getMinutes()).padStart(2,'0');
+      })
+      .catch(function(err){
+        showToast('Could not load data: ' + err.message, true);
+      })
+      .finally(function(){
+        btn.classList.remove('spinning');
+        document.getElementById('loader').style.display = 'none';
+      });
+  }
+
+  // ── Render all panels ─────────────────────────────────────────────────────
+  function renderAll() {
+    var byStatus = split();
+    document.getElementById('count-new').textContent         = byStatus.new.length;
+    document.getElementById('count-shortlisted').textContent = byStatus.shortlisted.length;
+    document.getElementById('count-rejected').textContent    = byStatus.rejected.length;
+    renderGrid();
+    renderList('shortlisted', byStatus.shortlisted);
+    renderList('rejected',    byStatus.rejected);
+  }
+
+  function split() {
+    return {
+      new:         candidates.filter(function(c){ return !c.status || c.status === 'New'; }),
+      shortlisted: candidates.filter(function(c){ return c.status === 'Shortlisted'; }),
+      rejected:    candidates.filter(function(c){ return c.status === 'Rejected'; })
+    };
+  }
+
+  // ── Grid (New Applications) ───────────────────────────────────────────────
+  function renderGrid() {
+    var search  = (document.getElementById('search-input').value || '').toLowerCase();
+    var list    = split().new;
+    if (search) {
+      list = list.filter(function(c){
+        return c.name.toLowerCase().includes(search) ||
+               c.role.toLowerCase().includes(search) ||
+               c.city.toLowerCase().includes(search);
+      });
+    }
+
+    var grid  = document.getElementById('grid-new');
+    var empty = document.getElementById('empty-new');
+
+    if (list.length === 0) {
+      grid.innerHTML = '';
+      empty.style.display = 'block';
+      return;
+    }
+    empty.style.display = 'none';
+
+    grid.innerHTML = list.map(function(c){
+      return '<div class="tile" onclick="openCandidate(' + c.rowId + ')">' +
+        '<div class="tile-top">' +
+          '<div class="avatar">' + initials(c.name) + '</div>' +
+          '<div><div class="tile-name">' + esc(c.name) + '</div>' +
+          '<div class="tile-role">' + esc(formatPhoneNumber(c.phone) || '') + '</div></div>' +
+        '</div>' +
+        '<div class="tile-meta">' +
+          '<span>' + esc(c.city || '—') + '</span>' +
+          (c.experience ? '<span>' + esc(c.experience) + ' yrs exp</span>' : '') +
+        '</div>' +
+        '<div class="tile-footer">' +
+          '<span class="tile-time">' + esc(c.timestamp) + '</span>' +
+          '<span class="status-pill new">New</span>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+  }
+  function formatPhoneNumber(phoneNumber) {
+    try {
+        // Convert to string and remove all non-digit characters
+        let digits = String(phoneNumber).replace(/\D/g, '');
+
+        // Validate length (example: 10 digits for Indian mobile numbers)
+        if (digits.length !== 10) {
+            throw new Error("Phone number must have exactly 10 digits.");
+        }
+
+        // Insert space after the 5th digit
+        return digits.slice(0, 5) + ' ' + digits.slice(5);
+    } catch (error) {
+        console.error("Invalid phone number:", error.message);
+        return '';
+    }
+}
+
+  // ── List (Shortlisted / Rejected) ─────────────────────────────────────────
+  function renderList(type, list) {
+    var container = document.getElementById('list-' + type);
+    var empty     = document.getElementById('empty-' + type);
+
+    if (list.length === 0) {
+      container.innerHTML = '';
+      empty.style.display = 'block';
+      return;
+    }
+    empty.style.display = 'none';
+
+    container.innerHTML = list.map(function(c){
+      var actions = '';
+      if (type === 'shortlisted') {
+        actions =
+          '<button class="btn-sm btn-email-invite" onclick="openEmailComposer(' + c.rowId + ')">✉ Schedule Interview</button>' +
+          '<button class="btn-sm btn-view" onclick="openCandidate(' + c.rowId + ')">View</button>';
+      } else {
+        actions =
+          '<button class="btn-sm btn-restore" onclick="doUpdateStatus(' + c.rowId + ',\'New\',this)">↩ Restore</button>' +
+          '<button class="btn-sm btn-view" onclick="openCandidate(' + c.rowId + ')">View</button>';
+      }
+      return '<div class="list-row">' +
+        '<div class="avatar sm' + (type === 'rejected' ? ' dim' : '') + '">' + initials(c.name) + '</div>' +
+        '<div class="row-info"><div class="row-name">' + esc(c.name) + '</div>' +
+        '<div class="row-sub">' + esc(c.role) + ' · ' + esc(c.city) + '</div></div>' +
+        '<div class="row-email">' + esc(c.email) + '</div>' +
+        '<div class="row-actions">' + actions + '</div>' +
+      '</div>';
+    }).join('');
+  }
+
+  // ── Candidate detail modal ─────────────────────────────────────────────────
+  function openCandidate(rowId) {
+    var c = candidates.find(function(x){ return x.rowId === rowId; });
+    if (!c) return;
+    currentRowId = rowId;
+
+    var statusClass = (c.status || 'new').toLowerCase();
+
+    // Contact chips
+    var chips =
+      chip('✉', esc(c.email), 'mailto:' + c.email) +
+      chip('📞', esc(c.phone || '—')) +
+      chip('📍', esc(c.city || '—')) +
+      (c.linkedin ? chip('🔗', 'LinkedIn', c.linkedin) : '');
+
+    // Detail cells
+    var cells =
+      cell('Experience',     (c.experience ? c.experience + ' yrs' : '—')) +
+      cell('Current Salary', fmtSalary(c.currentSalary)) +
+      cell('Expected Salary',fmtSalary(c.expectedSalary)) +
+      cell('Notice Period',  c.noticePeriod   || '—') +
+      cell('Comm Style',     c.commStyle      || '—') +
+      cell('Work Style',     c.workStyle      || '—') +
+      (c.referralName ? cell('Referred by', c.referralName) : '');
+
+    // Q&A
+    var qa =
+      qaBlock('What are you truly great at?',              c.q1) +
+      qaBlock('Walk us through how you solve a hard problem.', c.q2) +
+      qaBlock('What genuinely drives you?',                c.q3) +
+      qaBlock('Tell us about a time you owned a mistake.', c.q4) +
+      qaBlock('Why Stone Profits — and why now?',          c.q5) +
+      (c.additionalNotes ? qaBlock('Additional Notes', c.additionalNotes) : '');
+
+    document.getElementById('modal-content').innerHTML =
+      '<div class="modal-hero">' +
+        '<div class="avatar lg">' + initials(c.name) + '</div>' +
+        '<div><h2>' + esc(c.name) + '</h2>' +
+        '<div class="modal-role">' + esc(c.role || '—') + '</div></div>' +
+        '<span class="status-pill ' + statusClass + '" style="margin-left:auto">' + esc(c.status || 'New') + '</span>' +
+      '</div>' +
+      '<div class="modal-meta-chips">' + chips + '</div>' +
+      '<div class="detail-grid">' + cells + '</div>' +
+      '<div class="section-heading">Responses</div>' +
+      '<div>' + qa + '</div>' +
+      (c.resumeFile ? '<div style="font-size:13px;color:var(--muted);margin-top:16px">📎 Resume: ' + esc(c.resumeFile) + '</div>' : '');
+
+    // Footer action buttons
+    var footer = '';
+    var st = c.status || 'New';
+    if (st === 'New') {
+      footer =
+        '<button class="btn-action btn-shortlist" onclick="doUpdateStatus(' + rowId + ',\'Shortlisted\',this)">✓ Shortlist</button>' +
+        '<button class="btn-action btn-reject"    onclick="doUpdateStatus(' + rowId + ',\'Rejected\',this)">✗ Reject</button>';
+    } else if (st === 'Shortlisted') {
+      footer =
+        '<button class="btn-action btn-send-invite" onclick="openEmailComposer(' + rowId + ');closeModal()">✉ Schedule Interview</button>' +
+        '<button class="btn-action btn-reject"       onclick="doUpdateStatus(' + rowId + ',\'Rejected\',this)">✗ Reject</button>';
+    } else if (st === 'Rejected') {
+      footer =
+        '<button class="btn-action btn-to-new" onclick="doUpdateStatus(' + rowId + ',\'New\',this)">↩ Restore to New</button>';
+    }
+    document.getElementById('modal-footer').innerHTML = footer;
+
+    document.getElementById('modal-overlay').classList.add('open');
+  }
+
+  function closeModal() {
+    document.getElementById('modal-overlay').classList.remove('open');
+    currentRowId = null;
+  }
+
+  // ── Email composer ─────────────────────────────────────────────────────────
+  function openEmailComposer(rowId) {
+    var c = candidates.find(function(x){ return x.rowId === rowId; });
+    if (!c) return;
+    emailTarget = c;
+
+    document.getElementById('email-to').value      = c.email;
+    document.getElementById('email-to-name').textContent = 'To ' + c.name;
+    document.getElementById('email-subject').value =
+      'Interview Invitation — ' + (c.role || 'Position') + ' at Stone Profits';
+    document.getElementById('email-body').value =
+      'Dear ' + c.name + ',\n\n' +
+      'Thank you for applying for the ' + (c.role || 'position') + ' role at Stone Profits.\n\n' +
+      'We\'ve reviewed your application and are pleased to invite you for an interview.\n\n' +
+      'Please reply with your availability for the coming week and we will confirm a time that works.\n\n' +
+      'Looking forward to speaking with you.\n\n' +
+      'Warm regards,\nStone Profits Hiring Team';
+
+    var btn = document.getElementById('btn-send-email');
+    btn.disabled = false;
+    btn.textContent = 'Send Email';
+
+    document.getElementById('email-overlay').classList.add('open');
+  }
+
+  function closeEmail() {
+    document.getElementById('email-overlay').classList.remove('open');
+    emailTarget = null;
+  }
+
+  function sendEmail() {
+    var to      = document.getElementById('email-to').value;
+    var subject = document.getElementById('email-subject').value.trim();
+    var body    = document.getElementById('email-body').value.trim();
+    var btn     = document.getElementById('btn-send-email');
+
+    if (!subject || !body) { showToast('Subject and message cannot be empty.', true); return; }
+
+    btn.disabled    = true;
+    btn.textContent = 'Sending…';
+
+    fetch(SCRIPT_URL, {
+      method: 'POST',
+      body:   JSON.stringify({ action: 'sendEmail', to: to, subject: subject, body: body })
+    })
+    .then(function(r){ return r.json(); })
+    .then(function(json){
+      if (json.status === 'error') throw new Error(json.message);
+      closeEmail();
+      showToast('Interview email sent to ' + (emailTarget ? emailTarget.name : to) + '.');
+      emailTarget = null;
+    })
+    .catch(function(err){
+      showToast('Failed to send email: ' + err.message, true);
+      btn.disabled    = false;
+      btn.textContent = 'Send Email';
+    });
+  }
+
+  // ── Update status (Shortlist / Reject / Restore) ──────────────────────────
+  function doUpdateStatus(rowId, newStatus, btn) {
+    if (btn) { btn.disabled = true; btn.textContent = '…'; }
+
+    fetch(SCRIPT_URL, {
+      method:  'POST',
+      mode:    'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ action: 'updateStatus', rowId: rowId, status: newStatus })
+    })
+    .then(function(){
+      var c = candidates.find(function(x){ return x.rowId === rowId; });
+      if (c) c.status = newStatus;
+      renderAll();
+      closeModal();
+      showToast((c ? c.name : 'Candidate') + ' moved to ' + newStatus + '.');
+    })
+    .catch(function(err){
+      showToast('Error: ' + err.message, true);
+      if (btn) { btn.disabled = false; btn.textContent = newStatus; }
+    });
+  }
+
+  // ── Overlay click-outside to close ────────────────────────────────────────
+  function handleOverlayClick(evt, overlayId) {
+    if (evt.target.id === overlayId) {
+      if (overlayId === 'modal-overlay') closeModal();
+      else closeEmail();
+    }
+  }
+
+  // ── Helpers ───────────────────────────────────────────────────────────────
+  function initials(name) {
+    return (name || '?').trim().split(/\s+/).slice(0,2).map(function(w){ return w[0]; }).join('').toUpperCase();
+  }
+
+  function esc(str) {
+    return String(str == null ? '' : str)
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function fmtSalary(val) {
+    if (!val || val === '0') return '—';
+    var n = Number(val);
+    return isNaN(n) ? esc(val) : '₹' + n.toLocaleString('en-IN');
+  }
+
+  function chip(icon, label, href) {
+    if (href) return '<a class="chip" href="' + esc(href) + '" target="_blank">' + icon + ' ' + label + '</a>';
+    return '<span class="chip">' + icon + ' ' + label + '</span>';
+  }
+
+  function cell(label, value) {
+    return '<div class="detail-cell"><div class="lbl">' + esc(label) + '</div><div class="val">' + esc(value) + '</div></div>';
+  }
+
+  function qaBlock(question, answer) {
+    return '<div class="qa-item">' +
+      '<div class="qa-q">' + esc(question) + '</div>' +
+      '<div class="qa-a">' + (answer ? esc(answer) : '<em style="color:var(--muted)">—</em>') + '</div>' +
+    '</div>';
+  }
+
+  function showToast(msg, isError) {
+    var t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className   = 'toast show' + (isError ? ' error' : '');
+    setTimeout(function(){ t.className = 'toast'; }, 4000);
+  }
+
+  // ── Init ──────────────────────────────────────────────────────────────────
+  loadData();
+</script>
+</body>
+</html>

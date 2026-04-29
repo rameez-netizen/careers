@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Stone Profits - Join Our Team</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --stone: #1c1a17;
+    --stone-mid: #2e2b27;
+    --stone-light: #3d3a35;
+    --gold: #c9a84c;
+    --gold-light: #e2c47a;
+    --cream: #f4efe8;
+    --cream-dim: #d8d0c2;
+    --muted: #8a8278;
+    --danger: #c0574a;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--stone);
+    color: var(--cream);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Hero */
+  .hero {
+    position: relative;
+    padding: 80px 24px 64px;
+    text-align: center;
+    border-bottom: 1px solid var(--stone-light);
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      135deg, transparent, transparent 40px,
+      rgba(201,168,76,0.03) 40px, rgba(201,168,76,0.03) 41px
+    );
+    pointer-events: none;
+  }
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid rgba(201,168,76,0.4);
+    border-radius: 100px;
+    padding: 6px 18px;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 28px;
+  }
+  .hero-badge span {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--gold);
+    display: inline-block;
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+  .hero h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(40px, 7vw, 72px);
+    font-weight: 500;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--cream);
+    margin-bottom: 20px;
+  }
+  .hero h1 em { font-style: italic; color: var(--gold); }
+  .hero p {
+    font-size: 16px;
+    color: var(--muted);
+    max-width: 520px;
+    margin: 0 auto;
+    line-height: 1.7;
+  }
+
+  /* Layout */
+  .container { max-width: 760px; margin: 0 auto; padding: 0 24px 80px; }
+
+  /* Section divider */
+  .section-label {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 48px 0 24px;
+  }
+  .section-label span {
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--gold);
+    white-space: nowrap;
+  }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--stone-light); }
+
+  /* Form elements */
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .form-grid.cols-1 { grid-template-columns: 1fr; }
+  @media(max-width:560px){ .form-grid { grid-template-columns: 1fr; } }
+
+  .field { display: flex; flex-direction: column; gap: 8px; }
+  .field.full { grid-column: 1 / -1; }
+
+  label { font-size: 13px; font-weight: 500; color: var(--cream-dim); letter-spacing: 0.02em; }
+  label .req { color: var(--gold); margin-left: 2px; }
+
+  input[type=text], input[type=email], input[type=tel], input[type=url],
+  input[type=number], select, textarea {
+    background: var(--stone-mid);
+    border: 1px solid var(--stone-light);
+    border-radius: 8px;
+    color: var(--cream);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    padding: 12px 16px;
+    width: 100%;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+  input[type=number] { -moz-appearance: textfield; }
+  input[type=number]::-webkit-inner-spin-button,
+  input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+  input::placeholder, textarea::placeholder { color: var(--muted); }
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(201,168,76,0.12);
+  }
+  select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238a8278' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    padding-right: 40px;
+    cursor: pointer;
+  }
+  select option { background: var(--stone-mid); }
+  textarea { resize: vertical; min-height: 120px; line-height: 1.6; }
+  textarea.tall { min-height: 160px; }
+
+  .helper { font-size: 12px; color: var(--muted); line-height: 1.5; margin-top: -2px; }
+
+  /* Radio / checkbox group */
+  .choice-group { display: flex; flex-wrap: wrap; gap: 10px; }
+  .choice-group label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 16px;
+    background: var(--stone-mid);
+    border: 1px solid var(--stone-light);
+    border-radius: 100px;
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--cream-dim);
+    transition: border-color 0.15s, color 0.15s;
+    user-select: none;
+  }
+  .choice-group input[type=radio], .choice-group input[type=checkbox] { display: none; }
+  .choice-group label:has(input:checked) {
+    border-color: var(--gold);
+    color: var(--gold);
+    background: rgba(201,168,76,0.08);
+  }
+
+  /* Question cards */
+  .q-card {
+    background: var(--stone-mid);
+    border: 1px solid var(--stone-light);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 16px;
+  }
+  .q-card .q-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--cream);
+    margin-bottom: 6px;
+    line-height: 1.3;
+  }
+  .q-card .q-sub { font-size: 13px; color: var(--muted); margin-bottom: 14px; line-height: 1.5; }
+
+  /* Character count */
+  .char-wrap { position: relative; }
+  .char-count {
+    position: absolute;
+    bottom: 10px; right: 14px;
+    font-size: 11px;
+    color: var(--muted);
+    pointer-events: none;
+  }
+
+  /* Submit */
+  .submit-area {
+    margin-top: 48px;
+    border-top: 1px solid var(--stone-light);
+    padding-top: 36px;
+    text-align: center;
+  }
+  .submit-note { font-size: 13px; color: var(--muted); margin-bottom: 24px; line-height: 1.6; }
+  .submit-note strong { color: var(--cream-dim); }
+  .btn-submit {
+    background: var(--gold);
+    color: var(--stone);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    border: none;
+    border-radius: 8px;
+    padding: 16px 48px;
+    cursor: pointer;
+    letter-spacing: 0.02em;
+    transition: background 0.2s, transform 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .btn-submit:hover { background: var(--gold-light); transform: translateY(-1px); }
+  .btn-submit:active { transform: translateY(0); }
+  .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+  /* Field validation states */
+  .field-invalid input,
+  .field-invalid select,
+  .field-invalid textarea {
+    border-color: var(--danger) !important;
+    box-shadow: 0 0 0 3px rgba(192,87,74,0.12) !important;
+  }
+  .err-msg { font-size: 12px; color: #f5a89f; line-height: 1.4; display: none; margin-top: -2px; }
+  .err-msg.visible { display: block; }
+  .salary-warn { font-size: 12px; color: var(--gold); display: none; margin-top: -2px; }
+  .salary-warn.visible { display: block; }
+
+  /* Error banner */
+  .error-banner {
+    background: rgba(192,87,74,0.15);
+    border: 1px solid var(--danger);
+    color: #f5a89f;
+    border-radius: 10px;
+    padding: 16px 20px;
+    font-size: 14px;
+    margin-bottom: 24px;
+    line-height: 1.5;
+    display: none;
+  }
+  .error-banner.visible { display: block; }
+
+  /* Success state */
+  .success-wrap {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+    text-align: center;
+    padding: 64px 24px;
+  }
+  .success-wrap.visible { display: flex; }
+  .success-inner .check {
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    border: 1.5px solid var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 24px;
+    font-size: 24px;
+    color: var(--gold);
+  }
+  .success-inner h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px;
+    font-weight: 500;
+    margin-bottom: 12px;
+  }
+  .success-inner p {
+    color: var(--muted);
+    font-size: 15px;
+    max-width: 380px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  /* Progress bar */
+  .progress-wrap {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--stone);
+    border-bottom: 1px solid var(--stone-light);
+    padding: 10px 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .progress-bar { flex: 1; height: 3px; background: var(--stone-light); border-radius: 2px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--gold); border-radius: 2px; transition: width 0.4s ease; width: 0%; }
+  .progress-label { font-size: 12px; color: var(--muted); white-space: nowrap; }
+
+  #formSection { display: block; }
+</style>
+</head>
+<body>
+
+<!-- Hero (always visible) -->
+<div class="hero">
+  <div class="hero-badge"><span></span> Now Hiring</div>
+  <h1>We're building<br><em>Stone Profits</em></h1>
+  <p>We're not hiring resumes, we're hiring builders. Answer honestly. If you're the real deal, you'll hear from us.</p>
+</div>
+
+<!-- Success state (shown after submission) -->
+<div class="success-wrap" id="successWrap">
+  <div class="success-inner">
+    <div class="check">&#10003;</div>
+    <h2>Application received.</h2>
+    <p>We read every submission personally. If you're a fit, you'll hear from us within a few days. No automated rejections.</p>
+  </div>
+</div>
+
+<!-- Progress bar -->
+<div class="progress-wrap" id="progressWrap">
+  <div class="progress-bar"><div class="progress-fill" id="prog"></div></div>
+  <span class="progress-label" id="prog-label">0% complete</span>
+</div>
+
+<div class="container" id="formSection">
+
+  <div class="error-banner" id="errorBanner">
+    <strong>Submission error.</strong> Something went wrong — please try again in a moment.
+  </div>
+
+  <form id="appForm" novalidate>
+
+    <!-- 01 · Personal Info -->
+    <div class="section-label"><span>01 &middot; Personal info</span></div>
+    <div class="form-grid">
+      <div class="field">
+        <label for="fname">First name <span class="req">*</span></label>
+        <input type="text" id="fname" name="fname" placeholder="Arjun" autocomplete="given-name" />
+        <span class="err-msg" id="err-fname"></span>
+      </div>
+      <div class="field">
+        <label for="lname">Last name <span class="req">*</span></label>
+        <input type="text" id="lname" name="lname" placeholder="Sharma" autocomplete="family-name" />
+        <span class="err-msg" id="err-lname"></span>
+      </div>
+      <div class="field">
+        <label for="email">Email address <span class="req">*</span></label>
+        <input type="email" id="email" name="email" placeholder="arjun@email.com" autocomplete="email" />
+        <span class="err-msg" id="err-email"></span>
+      </div>
+      <div class="field">
+        <label for="phone">Phone number <span class="req">*</span></label>
+        <input type="tel" id="phone" name="phone" placeholder="+91 98765 43210" autocomplete="tel" />
+        <span class="err-msg" id="err-phone"></span>
+      </div>
+      <div class="field">
+        <label for="city">City / Location <span class="req">*</span></label>
+        <input type="text" id="city" name="city" placeholder="Hyderabad, India" />
+        <span class="err-msg" id="err-city"></span>
+      </div>
+      <div class="field">
+        <label for="linkedin">LinkedIn or Portfolio URL</label>
+        <input type="url" id="linkedin" name="linkedin" placeholder="https://linkedin.com/in/..." />
+        <span class="err-msg" id="err-linkedin"></span>
+      </div>
+    </div>
+
+    <!-- 02 · Role & Experience -->
+    <div class="section-label"><span>02 &middot; Role &amp; experience</span></div>
+    <div class="form-grid">
+      <!--<div class="field full">
+        <label for="role">Role you're applying for <span class="req">*</span></label>
+        <select id="role" name="role">
+          <option value="" disabled selected>Select a role</option>
+          <option>Sales &amp; Business Development</option>
+          <option>Operations &amp; Logistics</option>
+          <option>Finance &amp; Accounting</option>
+          <option>Marketing &amp; Growth</option>
+          <option>Technology &amp; Engineering</option>
+          <option>Customer Success</option>
+          <option>Legal &amp; Compliance</option>
+          <option>Other</option>
+        </select>
+        <span class="err-msg" id="err-role"></span>
+      </div>-->
+      <div class="field">
+        <label for="exp">Years of experience <span class="req">*</span></label>
+        <input type="number" id="exp" name="exp" placeholder="e.g. 5.5" min="0" max="60" step="0.5" />
+        <span class="err-msg" id="err-exp"></span>
+      </div>
+      <!--<div class="field">
+        <label for="work-type">Work preference <span class="req">*</span></label>
+        <select id="work-type" name="work-type">
+          <option value="" disabled selected>Select preference</option>
+          <option>On-site</option>
+          <option>Remote</option>
+          <option>Hybrid</option>
+          <option>Open to any</option>
+        </select>
+        <span class="err-msg" id="err-work-type"></span>
+      </div>-->
+      <div class="field">
+        <label for="notice">Notice period / Availability</label>
+        <select id="notice" name="notice">
+          <option value="" disabled selected>Select</option>
+          <option>Immediate</option>
+          <option>15 days</option>
+          <option>30 days</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="current-salary">Current salary (annual)</label>
+        <input type="number" id="current-salary" name="current-salary" placeholder="e.g. 800000" min="0" step="1000" />
+        <span class="err-msg" id="err-current-salary"></span>
+      </div>
+      <div class="field">
+        <label for="salary">Expected salary (annual)</label>
+        <input type="number" id="salary" name="salary" placeholder="e.g. 1200000" min="0" step="1000" />
+        <span class="err-msg" id="err-salary"></span>
+        <span class="salary-warn" id="warn-salary">Expected salary is lower than current &mdash; is that intentional?</span>
+      </div>
+    </div>
+
+    <!-- 03 · The real questions -->
+    <div class="section-label"><span>03 &middot; The real questions</span></div>
+    <p class="helper" style="margin-bottom:24px; font-size:14px; color:var(--muted); line-height:1.7;">
+      No AI-generated answers. Write like a human &mdash; specific, honest, and in your own voice. There are no wrong answers, only unreal ones.
+    </p>
+
+    <div class="q-card">
+      <div class="q-label">What are you truly great at?</div>
+      <div class="q-sub">Not your job title &mdash; your actual superpower. What do people come to you for? What do you do better than most?</div>
+      <div class="char-wrap">
+        <textarea class="tall" id="q1" name="q1" placeholder="Be specific. Give an example if it helps." maxlength="1000"></textarea>
+        <span class="char-count" id="c1">0 / 1000</span>
+      </div>
+      <span class="err-msg" id="err-q1"></span>
+    </div>
+
+    <div class="q-card">
+      <div class="q-label">Walk us through how you solve a hard problem.</div>
+      <div class="q-sub">Describe a real challenge you faced &mdash; how you diagnosed it, what you tried, what you learned. We care about the process, not just the outcome.</div>
+      <div class="char-wrap">
+        <textarea class="tall" id="q2" name="q2" placeholder="Situation &#8594; problem &#8594; your approach &#8594; result." maxlength="1200"></textarea>
+        <span class="char-count" id="c2">0 / 1200</span>
+      </div>
+      <span class="err-msg" id="err-q2"></span>
+    </div>
+
+    <div class="q-card">
+      <div class="q-label">What genuinely drives you?</div>
+      <div class="q-sub">Not "I'm passionate about growth." What actually gets you out of bed and into deep work? What would you do even if nobody paid you?</div>
+      <div class="char-wrap">
+        <textarea id="q3" name="q3" placeholder="Skip the clich&eacute;s. Tell us the truth." maxlength="800"></textarea>
+        <span class="char-count" id="c3">0 / 800</span>
+      </div>
+      <span class="err-msg" id="err-q3"></span>
+    </div>
+
+    <div class="q-card">
+      <div class="q-label">Tell us about a time you owned a mistake.</div>
+      <div class="q-sub">We're not looking for perfection &mdash; we're looking for accountability. Describe a failure, how you handled it, and what changed after.</div>
+      <div class="char-wrap">
+        <textarea id="q4" name="q4" placeholder="Be honest. We respect people who take ownership." maxlength="1000"></textarea>
+        <span class="char-count" id="c4">0 / 1000</span>
+      </div>
+      <span class="err-msg" id="err-q4"></span>
+    </div>
+
+    <div class="q-card">
+      <div class="q-label">Why Stone Profits &mdash; and why now?</div>
+      <div class="q-sub">What do you know about what we do? Why does this specific role at this specific company make sense for you right now?</div>
+      <div class="char-wrap">
+        <textarea id="q5" name="q5" placeholder="Generic 'I want to grow' answers will not be read." maxlength="800"></textarea>
+        <span class="char-count" id="c5">0 / 800</span>
+      </div>
+      <span class="err-msg" id="err-q5"></span>
+    </div>
+
+    <!-- 04 · How you work -->
+    <div class="section-label"><span>04 &middot; How you work</span></div>
+    <div class="form-grid cols-1">
+      <div class="field">
+        <label>How do you prefer to communicate? <span class="req">*</span></label>
+        <div class="choice-group" id="comm-pref">
+          <label><input type="radio" name="comm" value="async" /> Async (docs, Slack)</label>
+          <label><input type="radio" name="comm" value="sync" /> Sync (calls, meetings)</label>
+          <label><input type="radio" name="comm" value="mixed" /> Mix of both</label>
+        </div>
+        <span class="err-msg" id="err-comm"></span>
+      </div>
+      <div class="field">
+        <label>What best describes how you operate?</label>
+        <div class="choice-group">
+          <label><input type="radio" name="style" value="planner" /> Deep planner</label>
+          <label><input type="radio" name="style" value="executor" /> Fast executor</label>
+          <label><input type="radio" name="style" value="both" /> Both, depending</label>
+        </div>
+      </div>
+      <!--<div class="field">
+        <label>Are you open to a video/audio call with our team?</label>
+        <div class="choice-group">
+          <label><input type="radio" name="call" value="yes" /> Yes, absolutely</label>
+          <label><input type="radio" name="call" value="maybe" /> Depends on the time</label>
+          <label><input type="radio" name="call" value="no" /> Prefer to keep it async</label>
+        </div>
+      </div>-->
+    </div>
+
+    <!-- 05 · Resume -->
+    <div class="section-label"><span>05 &middot; Your r&eacute;sum&eacute;</span></div>
+    <div class="field">
+      <label for="resumeFile">Resume / CV link</label>
+      <input type="url" id="resumeFile" name="resumeFile" placeholder="https://drive.google.com/... or Dropbox, OneDrive, etc." />
+      <span class="helper">Paste a link to your resume (Google Drive, Dropbox, OneDrive). Make sure it's set to &ldquo;anyone with the link can view&rdquo;.</span>
+      <span class="err-msg" id="err-resumeFile"></span>
+    </div>
+
+    <!-- 06 · Anything else -->
+    <div class="section-label"><span>06 &middot; Anything else?</span></div>
+    <div class="field">
+      <label for="extra">Something you want us to know that the form didn't ask</label>
+      <textarea id="extra" name="extra" placeholder="Links, context, side projects, questions &mdash; anything." style="min-height:100px;"></textarea>
+    </div>
+
+    <div class="form-grid" style="margin-top:16px;">
+      <div class="field">
+        <label for="source">How did you find out about us?</label>
+        <select id="source" name="source">
+          <option value="" disabled selected>Select</option>
+          <option>LinkedIn</option>
+          <option>Referral (someone I know)</option>
+          <option>Job board (Naukri, Indeed, etc.)</option>
+          <option>Social media</option>
+          <option>Company website</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="referral">Referral name (if any)</label>
+        <input type="text" id="referral" name="referral" placeholder="Who referred you?" />
+      </div>
+    </div>
+
+    <!-- Submit -->
+    <div class="submit-area">
+      <p class="submit-note">
+        <strong>No AI-generated answers.</strong> Our team reads every application personally.<br />
+        If your answers are real, there's a 90% chance you'll get on a call with us.
+      </p>
+      <button type="submit" class="btn-submit" id="submitBtn">
+        Submit application &#8594;
+      </button>
+    </div>
+
+  </form>
+</div><!-- /container -->
+
+<script>
+  var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzli9cJtUeHRN6YYmVz3X2l0fmYhtJzBC3DRI-oxxwkiH3UTGrl3Stp2JQ_Hz_VOOnq/exec';
+
+  // ── Character counters ────────────────────────────────────────────────────────
+  [['q1','c1'],['q2','c2'],['q3','c3'],['q4','c4'],['q5','c5']].forEach(function(pair){
+    var ta = document.getElementById(pair[0]);
+    var ct = document.getElementById(pair[1]);
+    if (ta && ct) {
+      ta.addEventListener('input', function(){
+        ct.textContent = ta.value.length + ' / ' + ta.maxLength;
+        ct.style.color = ta.value.length > ta.maxLength * 0.9 ? '#c9a84c' : '';
+      });
+    }
+  });
+
+  // ── Progress bar ──────────────────────────────────────────────────────────────
+  var form       = document.getElementById('appForm');
+  var prog       = document.getElementById('prog');
+  var progLabel  = document.getElementById('prog-label');
+  var trackFields = ['fname','lname','email','phone','city','exp','q1','q2','q3','q4','q5'];
+
+  function updateProgress(){
+    var filled = 0;
+    trackFields.forEach(function(id){
+      var el = document.getElementById(id);
+      if (el && el.value && el.value.trim().length > 0) filled++;
+    });
+    var pct = Math.round((filled / trackFields.length) * 100);
+    if (prog) prog.style.width = pct + '%';
+    if (progLabel) progLabel.textContent = pct + '% complete';
+  }
+
+  // ── Validation rules ──────────────────────────────────────────────────────────
+  var RULES = [
+    { name:'fname',          required:true,  minLen:2,  type:'text',   msg:'Enter your first name (at least 2 characters).' },
+    { name:'lname',          required:true,  minLen:2,  type:'text',   msg:'Enter your last name (at least 2 characters).' },
+    { name:'email',          required:true,             type:'email',  msg:'Enter a valid email address (e.g. name@example.com).' },
+    { name:'phone',          required:true,             type:'phone',  msg:'Enter a valid phone number — digits only, 7 to 15 characters (spaces, +, - are fine).' },
+    { name:'city',           required:true,  minLen:2,  type:'text',   msg:'Enter your city or location.' },
+    { name:'linkedin',       required:false,            type:'url',    msg:'URL must start with https:// (e.g. https://linkedin.com/in/...).' },
+    { name:'exp',            required:true,             type:'salary', msg:'Enter your years of experience as a number (e.g. 3 or 5.5).' },
+    { name:'current-salary', required:false,            type:'salary', msg:'Enter a positive number with no currency symbols (e.g. 800000).' },
+    { name:'salary',         required:false,            type:'salary', msg:'Enter a positive number with no currency symbols (e.g. 1200000).' },
+    { name:'q1',             required:true,  minLen:30, type:'text',   msg:'Please write at least 30 characters — give us something real to read.' },
+    { name:'q2',             required:true,  minLen:30, type:'text',   msg:'Please write at least 30 characters — describe a real situation.' },
+    { name:'q3',             required:true,  minLen:30, type:'text',   msg:'Please write at least 30 characters — skip the clichés and be honest.' },
+    { name:'q4',             required:true,  minLen:30, type:'text',   msg:'Please write at least 30 characters — we respect accountability.' },
+    { name:'q5',             required:true,  minLen:30, type:'text',   msg:'Please write at least 30 characters — generic answers won\'t be read.' },
+    { name:'comm',           required:true,             type:'radio',  msg:'Please select your communication preference.' },
+    { name:'resumeFile',     required:false,            type:'url',    msg:'URL must start with https:// (e.g. https://drive.google.com/...).' }
+  ];
+
+  function isValidEmail(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v); }
+  function isValidPhone(v){ return /^\d{7,15}$/.test(v.replace(/[\s\-\(\)\+\.]/g,'')); }
+  function isValidUrl(v)  { return /^https?:\/\/.+\..+/.test(v); }
+
+  function setFieldState(name, ok, msg){
+    var errEl   = document.getElementById('err-' + name);
+    var inputEl = document.getElementById(name) || document.querySelector('[name="'+name+'"]');
+    if (!inputEl) return;
+    var fieldEl = inputEl;
+    while (fieldEl && fieldEl !== document.body){
+      if (fieldEl.classList && fieldEl.classList.contains('field')){ break; }
+      fieldEl = fieldEl.parentElement;
+    }
+    if (fieldEl) fieldEl.classList.toggle('field-invalid', !ok);
+    if (errEl){ errEl.textContent = ok ? '' : msg; errEl.className = 'err-msg' + (ok ? '' : ' visible'); }
+  }
+
+  function validateField(rule){
+    if (rule.type === 'radio'){
+      var checked = !!document.querySelector('[name="'+rule.name+'"]:checked');
+      var ok = !rule.required || checked;
+      setFieldState(rule.name, ok, rule.msg);
+      return ok;
+    }
+    var el  = document.getElementById(rule.name) || document.querySelector('[name="'+rule.name+'"]');
+    if (!el) return true;
+    var val = (el.value || '').trim();
+    var ok  = true;
+    if (rule.required && !val){
+      ok = false;
+    } else if (val){
+      if (rule.type === 'email'  && !isValidEmail(val)) ok = false;
+      if (rule.type === 'phone'  && !isValidPhone(val)) ok = false;
+      if (rule.type === 'url'    && !isValidUrl(val))   ok = false;
+      if (rule.type === 'salary' && (isNaN(+val) || +val < 0)) ok = false;
+      if (rule.minLen && val.length < rule.minLen)      ok = false;
+    }
+    setFieldState(rule.name, ok, rule.msg);
+    return ok;
+  }
+
+  // Attach per-field blur / change / live-fix listeners
+  RULES.forEach(function(rule){
+    if (rule.type === 'radio'){
+      document.querySelectorAll('[name="'+rule.name+'"]').forEach(function(r){
+        r.addEventListener('change', function(){ validateField(rule); });
+      });
+      return;
+    }
+    var el = document.getElementById(rule.name) || document.querySelector('[name="'+rule.name+'"]');
+    if (!el) return;
+    el.addEventListener('blur', function(){ validateField(rule); });
+    el.addEventListener('input', function(){
+      var errEl = document.getElementById('err-'+rule.name);
+      if (errEl && errEl.classList.contains('visible')) validateField(rule);
+    });
+    if (el.tagName === 'SELECT') el.addEventListener('change', function(){ validateField(rule); });
+  });
+
+  // Salary cross-check
+  function checkSalaryCross(){
+    var cur  = parseFloat((document.getElementById('current-salary')||{}).value) || 0;
+    var exp  = parseFloat((document.getElementById('salary')||{}).value) || 0;
+    var warn = document.getElementById('warn-salary');
+    if (warn) warn.className = 'salary-warn' + (cur > 0 && exp > 0 && exp < cur ? ' visible' : '');
+  }
+  var cSal = document.getElementById('current-salary');
+  var eSal = document.getElementById('salary');
+  if (cSal) cSal.addEventListener('input', checkSalaryCross);
+  if (eSal) eSal.addEventListener('input', checkSalaryCross);
+
+  if (form){
+    form.addEventListener('input', updateProgress);
+    form.addEventListener('change', updateProgress);
+
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+
+      // Run all validation
+      var allOk = true;
+      RULES.forEach(function(rule){ if (!validateField(rule)) allOk = false; });
+      if (!allOk){
+        var firstBad = document.querySelector('.field-invalid input, .field-invalid select, .field-invalid textarea');
+        if (firstBad){ firstBad.scrollIntoView({ behavior:'smooth', block:'center' }); firstBad.focus(); }
+        return;
+      }
+
+      var btn = document.getElementById('submitBtn');
+      if (btn){ btn.disabled = true; btn.textContent = 'Submitting…'; }
+      document.getElementById('errorBanner').classList.remove('visible');
+
+      var fname = (document.getElementById('fname').value || '').trim();
+      var lname = (document.getElementById('lname').value || '').trim();
+
+      var payload = {
+        action:           'submit',
+        candidateName:    (fname + ' ' + lname).trim(),
+        candidateEmail:   (document.getElementById('email').value || '').trim(),
+        candidatePhone:   (document.getElementById('phone').value || '').trim(),
+        city:             (document.getElementById('city').value || '').trim(),
+        linkedin:         (document.getElementById('linkedin').value || '').trim(),
+        role:             '',
+        experience:       parseFloat(document.getElementById('exp').value) || 0,
+        workPreference:   '',
+        noticePeriod:     (document.getElementById('notice').value || ''),
+        currentSalary:    parseFloat(document.getElementById('current-salary').value) || 0,
+        expectedSalary:   parseFloat(document.getElementById('salary').value) || 0,
+        commStyle:        (document.querySelector('[name="comm"]:checked') || {}).value || '',
+        workStyle:        (document.querySelector('[name="style"]:checked') || {}).value || '',
+        videoCall:        (document.querySelector('[name="call"]:checked') || {}).value || '',
+        q1:               (document.getElementById('q1').value || '').trim(),
+        q2:               (document.getElementById('q2').value || '').trim(),
+        q3:               (document.getElementById('q3').value || '').trim(),
+        q4:               (document.getElementById('q4').value || '').trim(),
+        q5:               (document.getElementById('q5').value || '').trim(),
+        referralSource:   (document.getElementById('source').value || ''),
+        referralName:     (document.getElementById('referral').value || '').trim(),
+        additionalNotes:  (document.getElementById('extra').value || '').trim(),
+        resumeFile:       (document.getElementById('resumeFile').value || '').trim()
+      };
+
+      fetch(SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+      .then(function(){
+        document.getElementById('progressWrap').style.display = 'none';
+        document.getElementById('formSection').style.display = 'none';
+        document.getElementById('successWrap').classList.add('visible');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      })
+      .catch(function(){
+        if (btn){ btn.disabled = false; btn.textContent = 'Submit application →'; }
+        document.getElementById('errorBanner').classList.add('visible');
+      });
+    });
+  }
+</script>
+</body>
+</html>
